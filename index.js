@@ -7,7 +7,15 @@ const server = http.createServer((request, response) => {
   const url = request.url;
 
   if (url === "/") {
-    fs.createReadStream("./index.html").pipe(response);
+    fs.readFile("./index.html", (err, data) => {
+      if (err) {
+        response.writeHead(404);
+        response.write("File not found!");
+      } else {
+        response.write(data);
+      }
+      response.end();
+    });
   } else if (url === "/about") {
     fs.createReadStream("./about.html").pipe(response);
   } else if (url === "/contact-me") {
